@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071b2e">
+<title>Mô phỏng sân bay Cà Mau · Dat Mui Airlines</title>
+<link rel="stylesheet" href="./airport-simulation.css">
+</head>
+<body id="top">
+<header class="topbar">
+  <a class="brand" href="#top" aria-label="Đầu trang mô phỏng"><span class="brand-mark">DM</span><span>DAT MUI<span class="brand-sub">AIRPORT SIMULATION</span></span></a>
+  <div class="top-status"><span class="live-dot"></span> MÔ PHỎNG ĐANG CHẠY <span class="divider">·</span> CÀ MAU, VIỆT NAM</div>
+  <span class="back-link">WEBSITE MÔ PHỎNG ĐỘC LẬP</span>
+</header>
+<main>
+  <section class="intro">
+    <div><div class="eyebrow">SÂN BAY CÀ MAU · PHỐI CẢNH Ý TƯỞNG CẤP 4E</div><h1>Một ngày vận hành<br><em>trên đường băng</em></h1><p>Quan sát máy bay rời ống lồng, lăn ra đường băng, cất cánh, tiếp cận và hạ cánh trong một sân bay mô phỏng.</p></div>
+    <div class="spec-card"><div><small>ĐƯỜNG CẤT HẠ CÁNH</small><strong>02</strong></div><div><small>ĐƯỜNG LĂN CHÍNH</small><strong>04</strong></div><div><small>VỊ TRÍ ĐỖ</small><strong>08</strong></div><div><small>THỜI TIẾT MÔ PHỎNG</small><strong>29° <span>☀</span></strong></div></div>
+  </section>
+  <section class="sim-shell" aria-label="Mô phỏng hoạt động sân bay">
+    <div class="sim-toolbar"><div class="view-label"><span class="view-icon">◉</span><div><b>Toàn cảnh sân bay</b><small>Góc nhìn từ trên cao · Cà Mau (CAH)</small></div></div><div class="controls"><button id="pauseBtn" class="control primary" type="button">Ⅱ <span>Tạm dừng</span></button><button id="speedBtn" class="control" type="button">1×</button><button id="resetBtn" class="control" type="button" title="Chạy lại mô phỏng">↻ <span class="hide-small">Chạy lại</span></button></div></div>
+    <div class="canvas-wrap"><canvas id="airportCanvas" aria-label="Sơ đồ sân bay có máy bay đang di chuyển"></canvas><div class="map-badge"><span class="live-dot"></span><span id="simClock">06:30:00</span><small>GIỜ MÔ PHỎNG</small></div><div class="map-compass">N<span>↑</span></div><div class="map-legend"><span><i class="legend-runway"></i> Đường băng</span><span><i class="legend-taxi"></i> Đường lăn</span><span><i class="legend-aircraft">✈</i> Máy bay</span></div></div>
+    <div class="sim-footer"><span><b id="activeCount">0</b> máy bay đang hoạt động</span><span>Đường băng 09/27 <b id="rwy1">SẴN SÀNG</b></span><span>Đường băng 10/28 <b id="rwy2">SẴN SÀNG</b></span><span class="sim-disclaimer">Mô phỏng hình ảnh, không phải dữ liệu điều hành thật.</span></div>
+  </section>
+  <section class="lower-grid">
+    <article class="panel"><div class="panel-head"><div><span class="eyebrow">CHUYẾN BAY</span><h2>Hoạt động quanh sân bay</h2></div><span class="live-pill"><i></i> TRỰC QUAN</span></div><div id="flightBoard" class="flight-board" aria-live="polite"></div></article>
+    <article class="panel log-panel"><div class="panel-head"><div><span class="eyebrow">NHẬT KÝ</span><h2>Điều phối sân bay</h2></div><span class="log-icon">≋</span></div><div id="eventLog" class="event-log" aria-live="polite"></div><div class="legend-note"><span class="plane-blue">✈</span> Máy bay được hoạt họa theo lịch mô phỏng</div></article>
+  </section>
+  <section class="footnote"><b>Thông tin thiết kế:</b> Trang này trình bày phối cảnh sân bay giả lập với hai đường băng. Cấp 4E là mã tham chiếu thiết kế trong mô phỏng; các chuyển động không đại diện cho lịch bay, kiểm soát không lưu hay vị trí máy bay thật.</section>
+</main>
+<script src="./airport-simulation.js"></script>
+</body>
+</html>
