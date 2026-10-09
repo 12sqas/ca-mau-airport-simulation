@@ -1,5 +1,8 @@
 (() => {
   const canvas=document.getElementById('airportCanvas'),ctx=canvas.getContext('2d');
+  const airportPhoto=new Image();
+  airportPhoto.src='./airport-aerial.png';
+  airportPhoto.addEventListener('load',()=>render());
   const W=1440,H=920,gateXs=[880,940,1000,1060,1120,1180,1240,1300];
   const runways=[{id:'09/27',y:480,taxiY:535},{id:'10/28',y:650,taxiY:705}];
   const phaseNames={parked:'ĐANG ĐỖ',pushback:'RỜI ỐNG LỒNG',taxiout:'LĂN RA ĐƯỜNG BĂNG',lineup:'VÀO VỊ TRÍ',takeoff:'ĐANG CẤT CÁNH',climb:'ĐANG LÊN CAO',cruise:'TRÊN ĐƯỜNG BAY',approach:'ĐANG TIẾP CẬN',landing:'ĐANG HẠ CÁNH',taxiin:'LĂN VÀO NHÀ GA'};
@@ -11,7 +14,10 @@
   const lerp=(a,b,t)=>a+(b-a)*t;
   const ease=t=>t*t*(3-2*t);
   const routeLengths=pts=>{let lens=[0],sum=0;for(let i=1;i<pts.length;i++){sum+=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);lens.push(sum);}return {lens,total:sum};};
-  function sample(pts,t){const {lens,total}=routeLengths(pts),target=Math.max(0,Math.min(1,t))*total;let i=1;while(i<lens.length-1&&lens[i]<target)i++;const span=lens[i]-lens[i-1]||1,u=(target-lens[i-1])/span,a=pts[i-1],b=pts[i];return {x:lerp(a[0],b[0],u),y:lerp(a[1],b[1],u),angle:Math.atan2(b[1]-a[1],b[0]-a[0])};}
+  function sample(pts,t){
+    if(!Array.isArray(pts)||pts.length===0)return {x:0,y:0,angle:0};
+    if(pts.length===1)return {x:pts[0][0],y:pts[0][1],angle:0};
+    const {lens,total}=routeLengths(pts),target=Math.max(0,Math.min(1,t))*total;let i=1;while(i<lens.length-1&&lens[i]<target)i++;const span=lens[i]-lens[i-1]||1,u=(target-lens[i-1])/span,a=pts[i-1],b=pts[i];return {x:lerp(a[0],b[0],u),y:lerp(a[1],b[1],u),angle:Math.atan2(b[1]-a[1],b[0]-a[0])};}
   const gatePoint=p=>[gateXs[p.gate],330];
   function pathFor(p,phase){const rw=runways[p.runway],g=gatePoint(p),from=sample(p.route||[g],p.t);
     switch(phase){
@@ -36,7 +42,9 @@
   function clockText(){const s=Math.floor(simSeconds)%86400,h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60;return [h,m,sec].map(v=>String(v).padStart(2,'0')).join(':');}
   function renderLog(){ $('eventLog').innerHTML=events.map(e=>`<div class="event"><time>${e.time.slice(0,5)}</time><span>${esc(e.message)}</span></div>`).join(''); }
   function esc(s){return String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
-  function drawBackground(){ctx.fillStyle='#425749';ctx.fillRect(0,0,W,H);
+  function drawBackground(){
+    if(airportPhoto.complete&&airportPhoto.naturalWidth){ctx.drawImage(airportPhoto,0,0,W,H);return;}
+    ctx.fillStyle='#425749';ctx.fillRect(0,0,W,H);
     // Green delta fields, canals, service roads and low terminal-side development.
     for(let i=0;i<90;i++){const x=(i*173+31)%W,y=(i*97+27)%H;if((y<300&&x<820)||(y>755)||(x<55)){ctx.fillStyle=i%3?'#50664c':'#617354';ctx.fillRect(x,y,70+(i%5)*13,20+(i%4)*8);}}
     ctx.strokeStyle='#315e66';ctx.lineWidth=18;ctx.beginPath();ctx.moveTo(0,120);ctx.bezierCurveTo(240,170,355,20,610,83);ctx.bezierCurveTo(720,110,715,250,820,270);ctx.stroke();ctx.strokeStyle='#7ea5a1';ctx.lineWidth=1.2;ctx.stroke();
